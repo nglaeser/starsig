@@ -50,7 +50,7 @@ Verification key is encoded as a 32-byte string using Ristretto compression.
 
 ### Signature
 
-A pair of a [point](#point) `R` and [scalar](#scalar) `s` that proves the knowledge of the secret key for a given message and a [verification key](#verification-key). Signature is _bound_ to the message and the verification key, but they are not the part of the signature data.
+A pair of a [point](#point) `R` and [scalar](#scalar) `s` that proves the knowledge of the secret key for a given message and a [verification key](#verification-key). Signature is _bound_ to the message, but it is not part of the signature data.
 
 ```
 (R,s)
@@ -96,31 +96,26 @@ corresponding to some [verification key](#verification-key) in a context of some
 The protocol is the following:
 
 1. Prover and verifier obtain a [transcript](#transcript) `T` that is assumed to be already bound to the _message_ being signed.
-2. Prover and verifier both commit the verification key `X` (computed by the prover as `X = x·B`):
-    ```
-    T.append("dom-sep", "starsig v1")
-    T.append("X", X)
-    ```
-3. Prover creates a _secret nonce_: a randomly sampled [scalar](#scalar) `r`.
-4. Prover commits to its nonce:
+1. Prover creates a _secret nonce_: a randomly sampled [scalar](#scalar) `r`.
+1. Prover commits to its nonce:
     ```
     R = r·B
     ```
-5. Prover sends `R` to the verifier.
-6. Prover and verifier write the nonce commitment `R` to the transcript:
+1. Prover sends `R` to the verifier.
+1. Prover and verifier write the nonce commitment `R` to the transcript:
     ```
     T.append("R", R)
     ```
-7. Prover and verifier compute a Fiat-Shamir challenge scalar `c` using the transcript:
+1. Prover and verifier compute a Fiat-Shamir challenge scalar `c` using the transcript:
     ```
     c = T.challenge_scalar("c")
     ```
-8. Prover blinds the secret scalar `x` using the nonce and the challenge:
+1. Prover blinds the secret scalar `x` using the nonce and the challenge:
     ```
     s = r + c·x
     ```
-9. Prover sends `s` to the verifier.
-10. Verifier checks the relation:
+1. Prover sends `s` to the verifier.
+1. Verifier checks the relation:
     ```
     s·B  ==  R + c·X
     ```

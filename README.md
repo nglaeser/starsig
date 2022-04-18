@@ -1,3 +1,5 @@
+> **This is a fork of [stellar/slingshot/starsig](https://github.com/stellar/slingshot/tree/main/starsig)** (original crate [here](https://crates.io/crates/starsig)). The only difference from the upstream is that the signer does not commit to its verification key as part of the signature (i.e., the verification key will not be in the payload of the hash `c` used in the signature).
+
 # Starsig: schnorr signatures on Ristretto
 
 Implementation of a simple Schnorr signature protocol

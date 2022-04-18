@@ -23,7 +23,7 @@ pub struct Signature {
 impl Signature {
     /// Creates a signature for a single private key and single message
     pub fn sign(transcript: &mut Transcript, privkey: Scalar) -> Signature {
-        let X = VerificationKey::from_secret(&privkey); // pubkey
+        // let X = VerificationKey::from_secret(&privkey); // pubkey
 
         let mut rng = transcript
             .build_rng()
@@ -35,9 +35,10 @@ impl Signature {
         // R = generator * r
         let R = (RISTRETTO_BASEPOINT_POINT * r).compress();
 
+        // The message has already been fed into the transcript
         let c = {
             transcript.starsig_domain_sep();
-            transcript.append_point(b"X", X.as_point());
+            // transcript.append_point(b"X", X.as_point());
             transcript.append_point(b"R", &R);
             transcript.challenge_scalar(b"c")
         };
@@ -71,7 +72,7 @@ impl Signature {
         // The message has already been fed into the transcript
         let c = {
             transcript.starsig_domain_sep();
-            transcript.append_point(b"X", pubkey.as_point());
+            // transcript.append_point(b"X", pubkey.as_point());
             transcript.append_point(b"R", &self.R);
             transcript.challenge_scalar(b"c")
         };

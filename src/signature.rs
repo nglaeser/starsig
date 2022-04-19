@@ -3,6 +3,7 @@ use curve25519_dalek::constants::RISTRETTO_BASEPOINT_POINT;
 use curve25519_dalek::ristretto::CompressedRistretto;
 use curve25519_dalek::scalar::Scalar;
 use std::fmt;
+use std::ops::Add;
 
 use merlin::Transcript;
 
@@ -145,5 +146,12 @@ impl fmt::Debug for Signature {
         )
         // Without hex crate we'd do this, but it outputs comma-separated numbers: [aa, 11, 5a, ...]
         // write!(f, "{:x?}", &self.0)
+    }
+}
+impl Add<Scalar> for Signature {
+    type Output = Signature;
+    fn add (self, scalar: Scalar) -> Signature {
+        let s_new: Scalar = self.s + scalar;
+        Signature { s: s_new, R: self.R }
     }
 }

@@ -11,7 +11,8 @@ pub type SigningKey = Scalar;
 #[derive(Copy, Clone, PartialEq, Eq, Default, Debug, Serialize, Deserialize)]
 #[serde(from = "CompressedRistretto", into = "CompressedRistretto")]
 pub struct VerificationKey {
-    point: CompressedRistretto,
+    /// VerificationKey as a CompressedRistretto point
+    pub point: CompressedRistretto,
 }
 
 impl VerificationKey {
